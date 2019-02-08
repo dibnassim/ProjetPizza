@@ -3,16 +3,21 @@ $message = '';
 
 // Condition : Si le champ de texte ID de livraison contient un chiffre 
 // et que la variable bouton est non NULL alors le code suivant est exécuté :
-if(isset($_GET['submit']) && $_GET['numéroLivraison'] != "Aucune" )
+if(isset($_GET['submit']) && $_GET['idLivraison'] != "Aucune" )
 {
         //Déclaration et assignation des variables suivantes :
-        $idLivraison = $_GET['numéroLivraison'];
+        $idLivraison = $_GET['idLivraison'];
         $telLivreur = $_GET['telLivreur'];
 
-           
+        //Déclaration et assignation de la chaîne de connexion.
+        $db_host     = "sl-eu-gb-p02.dblayer.com";
+        $db_username = "admin";
+        $db_password = "NPHBWPATUXNHFCQK";   
+        $db_name = "pizza"; 
+        $db_port = "17329";
 
         //Tentative de connexion à la base de données.
-        $connection = new PDO('mysql:host=127.0.0.1;dbname=Dbpizza;charset=utf8', 'userxx', '123');
+        $connection = mysqli_connect($db_host, $db_username, $db_password, $db_name, $db_port);
         if (!$connection) {
             $message = '<div class="errorMessage"> <p>Connexion avec le serveur distant impossible</p></div>';
         }
@@ -29,9 +34,9 @@ if(isset($_GET['submit']) && $_GET['numéroLivraison'] != "Aucune" )
 
         mysqli_close($connection);
     }
-    // Sinnvon si aucune livraison n'est disponnible et que le champ de texte ID livraison
+    // Sinon si aucune livraison n'est disponnible et que le champ de texte ID livraison
     // affiche "Aucune", alors la requête n'est pas exécutée et le message suivant s'affiche.
-    else if ($_GET['numéroLivraison'] == "Aucune") {
+    else if ($_GET['idLivraison'] == "Aucune") {
         $message = '<div class="errorMessage"> <p>Aucune livraison à effectuer.</p></div>';
     }
 

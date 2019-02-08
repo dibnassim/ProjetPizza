@@ -13,20 +13,28 @@ error_reporting(0);
     </script>
 </head>
 <body>
+<div id="backOpacity">
+
+        <h1 id="titleh1">Espace de livraison</h1>
+       <img src="/var/www/html/Ppizza/pizza-dessin.png" alt="Photo lol" />
 
         <?php
-            
-            
-            //Tentative de connexion à la base de données.
-            $connection = new PDO('mysql:host=127.0.0.1;dbname=Dbpizza;charset=utf8', 'userxx', '123');
+            //Déclaration et assignation de la chaîne de connexion.
+            $db_host = "sl-eu-gb-p02.dblayer.com";
+            $db_username = "admin";
+            $db_password = "NPHBWPATUXNHFCQK";   
+            $db_name = "pizza"; 
+            $db_port = "17329";
 
+            //Tentative de connexion à la base de données.
+            $connection = mysqli_connect($db_host, $db_username, $db_password, $db_name, $db_port);
             //Écriture de la requête SQL.
-            $sql = mysqli_query($connection, "SELECT numéroLivraison FROM Livraison WHERE refLivreur IS NULL");
+            $sql = mysqli_query($connection, "SELECT idLivraison FROM Livraison WHERE refTelLivreur IS NULL");
             //Si la requête est valide alors la boucle s'exécute.
             if($sql){
                 //Lecture des données tant qu'il y en a puis stockage dans un tableau.
                 while($row = mysqli_fetch_array($sql)) {
-                    $livraisons[] = $row['numéroLivraison'];
+                    $livraisons[] = $row['idLivraison'];
                 }
             }
             //Si la requête échoue, un message s'affiche.
@@ -38,7 +46,7 @@ error_reporting(0);
         <div class="container">
         <form action="" method="GET">
             <label> ID de la livraison : </label>
-            <input name="numéroLivraison" type="text" required placeholder="ID de la livraison" oninvalid="this.setCustomValidity('ID de livraison non renseigné')"
+            <input name="idLivraison" type="text" required placeholder="ID de la livraison" oninvalid="this.setCustomValidity('ID de livraison non renseigné')"
             oninput="this.setCustomValidity('')" value=
                 
             <?php
@@ -56,16 +64,17 @@ error_reporting(0);
             <label> Liste des livreurs </label>
             <?php
                 //Tentative de connexion à la base de données.
-                $connection = new PDO('mysql:host=127.0.0.1;dbname=Dbpizza;charset=utf8', 'userxx', '123');
+                $connection = mysqli_connect($db_host, $db_username, $db_password, $db_name, $db_port);
                 //Écriture de la requête SQL. 
-                $sql = mysqli_query($connection, "SELECT telLivreur, prenomLivreur FROM Livreur");
+                $sql = mysqli_query($connection, "SELECT telLivreur, nomLivreur, prenomLivreur FROM Livreur");
                 //Création de la liste déroulante.
                 echo '<select name="telLivreur" required placeholder>';
                 //Si la requête est valide alors la boucle s'exécute.
                 if($sql){
                     //Lecture des données puis affichage des données récupérées dans la liste déroulante.
                     while($row = mysqli_fetch_array($sql)) {
-                        echo '<td style=color:#404040;> <option value='.$row['telLivreur'].'>'.$row['nomLivreur'].'</option>';
+                        echo '<td style=color:#404040;> <option value='.$row['telLivreur'].'>'.$row['nomLivreur']." ".$row['prenomLivreur'] .
+                        '</option>';
                     }
                 }
                 //Si la requête échoue, un message s'affiche.
@@ -79,12 +88,5 @@ error_reporting(0);
         </form>
         </div>
 </div>
-</body>
-</html>
-
-
-
-
-
 </body>
 </html>
